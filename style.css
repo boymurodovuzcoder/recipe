@@ -49,6 +49,7 @@ header:hover {
 }
 .search {
     margin-left: 1rem;
+    width: 90%;
 }
 .notFound{
     text-align: center;
