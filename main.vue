@@ -6,21 +6,24 @@ Vue.component("LIST", {
               <div class="col-md list">
                 <div class="sec head">A List of Recipes</div>
                 <ul>
-                   <li v-for="recipe in recipeslist" :key="recipe.id" :class="[{martop: recipe.id !== 1}, {active: selected === recipe}]" @click="showRecipe(recipe)" >
-                       <img :src="recipe.src">
+                   <li v-for="(recipe, index) in computedList" :key="recipe.id" :class="[{martop: recipe.id !== 1}, {active: selected === recipe}]" @click="showRecipe(recipe)" >
+                       <img :src="recipe.src" id="myImg" :alt="recipe.name">
+
                        <div class="detail">
                            <div class="name">
                                {{recipe.name}} 
                            </div>
                            Added on {{recipe.addedTime}}
+                           <i class="fas fa-trash trash" @click="removeElement(index)"></i>
                        </div>
+                       
                    </li> 
                 </ul>
               </div>
               <div class="col-md SelectedRecipe">
                 <div class="sec head">Selected Recipe</div>
 
-                    <div class="selected" v-show="selected.id != undefined">
+                    <div class="selected" v-show="this.$root.showSelected">
                         <img :src="selected.src">
                         <div class="detail">
                             <div class="name">
@@ -34,13 +37,11 @@ Vue.component("LIST", {
                             
                         </div>
                     </div>
-
-                    
-                      
-                      
                     </div>
               </div>
+              <div v-if="this.$root.computedList == ''" class="notFound">No Recipe Found</div>
             </div>
+            
           </div>`,
   computed: {
     recipeslist: function(){
@@ -48,11 +49,17 @@ Vue.component("LIST", {
     },
     selected: function(){
       return this.$root.selected;
+    },
+    computedList: function(){
+      return this.$root.computedList;
     }
   },
   methods: {
     showRecipe(recipe) {
       this.$root.showRecipe(recipe);
+    },
+    removeElement(index) {
+      this.$root.removeElement(index);
     }
   },
 })
@@ -89,9 +96,6 @@ Vue.component("ADD", {
   <p v-else-if="isActive === 'detailRecipe'" class="warning">Detail of Recipe is required</p>  
   <div v-show="typing" v-else-if="isActive==true" class="alert alert-success alert-dismissible fade show success" role="alert" style="margin-top: 1rem;">
   <strong>New Recipe Successfully Added!</strong>
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button> 
   </div>
 
   </form>
@@ -156,7 +160,8 @@ Vue.component("ADD", {
         this.isActive = true
         this.newRecipe.name = this.name
         this.newRecipe.recipe = this.detailRecipe
-        this.newRecipe.id = this.$root.recipeslist[this.$root.recipeslist.length-1].id + 1
+        this.$root.nextid += 1
+        this.newRecipe.id = this.$root.nextid 
 
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -177,11 +182,30 @@ Vue.component("ADD", {
         this.name = ""
         this.detailRecipe = ""
         item.image = false
+        this.newRecipe.src = ""
 
       }
     }
   }
 })
+
+Vue.component("searchcomp", {
+  template :
+  `
+  <input v-model="query" @input="queryF" class="form-control mr-sm-2 search" type="search" placeholder="Search recipe" aria-label="Search">
+  `,
+  data() {
+    return {
+      query: "",
+    }
+  },
+  methods: {
+    queryF: function() {
+      this.$root.queryText = this.query
+    }
+  },
+})
+
 
 var app = new Vue({
   el: "#app",
@@ -211,14 +235,30 @@ var app = new Vue({
     ],
     selected: {},
     currentcomp: "LIST",
-    isActiveButton: false,
     nextid:3,
+    queryText:"",
+    showSelected: false,
   },
   
   methods: {
     showRecipe(recipe) {
       this.selected = recipe;
       console.log(this.selected);
+      this.showSelected = true;
+    },
+    removeElement(index) {
+      this.recipeslist.splice(index,1)
+      console.log("remove " + index)
+      this.showSelected = false
+      this.selected = {}
+    }
+  },
+  computed: {
+    computedList: function () {
+      var vm = this
+      return this.recipeslist.filter(function (item) {
+        return ((item.name.toLowerCase().indexOf(vm.queryText.toLowerCase()) !== -1) || (item.recipe.toLowerCase().indexOf(vm.queryText.toLowerCase()) !== -1))
+      })
     }
   },
   

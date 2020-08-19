@@ -1,4 +1,3 @@
-
 header {
     font-size: 2.25rem;
     padding: 1.2rem 1.25rem;
@@ -42,12 +41,19 @@ header:hover {
     border-radius: 5px;
 }
 .list {
-    background-color: #fff83156;
-    
+    background-color: #fff83156;    
     border-radius: 5px;
     margin-right: 1rem;
     margin-left: 1rem;
     margin-top: 1rem;
+}
+.search {
+    margin-left: 1rem;
+}
+.notFound{
+    text-align: center;
+    font-size: 2rem;
+    margin-top: 2rem;
 }
 .SelectedRecipe {
     background-color: #fff83156;
@@ -58,6 +64,7 @@ header:hover {
 }
 .list ul li {
     display: flex;
+    position: relative;
     background-color: gainsboro;
     border-radius: 3px;
     cursor: pointer;
@@ -78,12 +85,30 @@ header:hover {
     height: 6rem;
     width: 6rem;
     float: left;
-    border-radius: 3px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
 }
+.list ul li img:hover {opacity: 0.7;}
 
 .detail {
     padding-left: 1rem;
-
+}
+.trash {
+    position: absolute;
+    right: 0;
+    padding-right: 0.6rem;
+    top: 0;
+    padding-top: 0.6rem;
+    font-size: 1rem;
+    transition: 0.6s;
+}
+.trash:hover {
+    color: rgb(153, 138, 138);
+    cursor: auto;
+}
+.trash:active {
+    font-size: 1.25rem;
 }
 .sec {
     padding-bottom: 1rem !important;
@@ -141,3 +166,5 @@ footer {
     font-weight: 500;
     letter-spacing: -0.2px;
 }
+
+
