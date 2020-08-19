@@ -40,6 +40,9 @@ header:hover {
     margin-bottom: 1rem;
     border-radius: 5px;
 }
+.exception {
+    margin-bottom: -1rem !important;
+}
 .list {
     background-color: #fff83156;    
     border-radius: 5px;
@@ -68,7 +71,7 @@ header:hover {
     position: relative;
     background-color: gainsboro;
     border-radius: 3px;
-    cursor: pointer;
+    
     transition: 0.5s;
 }
 
@@ -94,6 +97,8 @@ header:hover {
 
 .detail {
     padding-left: 1rem;
+    cursor: pointer;
+    width: 100%;
 }
 .trash {
     position: absolute;

@@ -1,21 +1,21 @@
 Vue.component("LIST", {
-  inject: ["showRecipe"],
+  
   template: 
   `<div class="container">
             <div class="row">
               <div class="col-md list">
-                <div class="sec head">A List of Recipes</div>
+                <div class="sec head exception">A List of Recipes</div>
                 <ul>
-                   <li v-for="(recipe, index) in computedList" :key="recipe.id" :class="[{martop: recipe.id !== 1}, {active: selected === recipe}]" @click="showRecipe(recipe)" >
-                       <img :src="recipe.src" id="myImg" :alt="recipe.name">
+                   <li v-for="(recipe, index) in computedList" :key="recipe.id" :class="[{active: selected === recipe}, {martop:true}]" >
+                       <img :src="recipe.src" id="myImg" :alt="recipe.name" @click="showRecipe(recipe)">
 
-                       <div class="detail">
+                       <div class="detail"  @click="showRecipe(recipe)">
                            <div class="name">
                                {{recipe.name}} 
                            </div>
                            Added on {{recipe.addedTime}}
-                           <i class="fas fa-trash trash" @click="removeElement(index)"></i>
                        </div>
+                       <i class="fas fa-trash trash" @click="removeElement(index)"></i>
                        
                    </li> 
                 </ul>
@@ -23,7 +23,7 @@ Vue.component("LIST", {
               <div class="col-md SelectedRecipe">
                 <div class="sec head">Selected Recipe</div>
 
-                    <div class="selected" v-show="this.$root.showSelected">
+                    <div class="selected" v-if="selected.id!=undefined">
                         <img :src="selected.src">
                         <div class="detail">
                             <div class="name">
@@ -172,7 +172,7 @@ Vue.component("ADD", {
         
         
         this.$root.nextid += 1
-        this.$root.recipeslist.push({
+        this.$root.recipeslist.unshift({
           src: this.newRecipe.src,
           name: this.newRecipe.name,
           addedTime: today,
@@ -237,20 +237,19 @@ var app = new Vue({
     currentcomp: "LIST",
     nextid:3,
     queryText:"",
-    showSelected: false,
   },
   
   methods: {
     showRecipe(recipe) {
       this.selected = recipe;
       console.log(this.selected);
-      this.showSelected = true;
     },
     removeElement(index) {
+      if (this.recipeslist[index].id == this.selected.id) {
+        this.selected = {}
+      }
       this.recipeslist.splice(index,1)
       console.log("remove " + index)
-      this.showSelected = false
-      this.selected = {}
     }
   },
   computed: {
