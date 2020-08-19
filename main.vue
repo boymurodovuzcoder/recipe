@@ -7,7 +7,36 @@ Vue.component("LIST", {
                 <div class="sec head exception">A List of Recipes</div>
                 <ul>
                    <li v-for="(recipe, index) in computedList" :key="recipe.id" :class="[{active: selected === recipe}, {martop:true}]" >
-                       <img :src="recipe.src" id="myImg" :alt="recipe.name" @click="showRecipe(recipe)">
+                       
+
+
+
+
+                      <!-- Creates the bootstrap modal where the image will appear -->
+                      <a href="#" id="pop" onclick="$(this).next().modal('show');">
+                          <img id="imageresource" :src="recipe.src" :alt="recipe.name">
+                      </a>
+
+                      <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">{{recipe.name}}</h4>
+                              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                              
+                            </div>
+                            <div class="modal-body">
+                              <img :src="recipe.src" id="imagepreview" style="width: 100%; height: 100%;" :alt="recipe.name" @click="showRecipe(recipe)">
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+
 
                        <div class="detail"  @click="showRecipe(recipe)">
                            <div class="name">
