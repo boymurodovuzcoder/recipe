@@ -7,11 +7,7 @@ Vue.component("LIST", {
                 <div class="sec head exception">A List of Recipes</div>
                 <ul>
                    <li v-for="(recipe, index) in computedList" :key="recipe.id" :class="[{active: selected === recipe}, {martop:true}]" >
-                       
-
-
-
-
+                   
                       <!-- Creates the bootstrap modal where the image will appear -->
                       <a href="#" id="pop" onclick="$(this).next().modal('show');">
                           <img id="imageresource" :src="recipe.src" :alt="recipe.name">

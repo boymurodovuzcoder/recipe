@@ -88,6 +88,7 @@ header:hover {
 .list ul li img {
     height: 6rem;
     width: 6rem;
+    object-fit: cover;
     float: left;
     border-radius: 5px;
     cursor: pointer;
