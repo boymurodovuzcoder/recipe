@@ -48,9 +48,9 @@ Vue.component("LIST", {
                             
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#" @click="removeElement(index)">Delete</a>
-                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#" @click="edit(index)">Edit</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" @click="removeElement(index)">Delete</a>
                         </div>
                         </div>
                        
@@ -61,7 +61,13 @@ Vue.component("LIST", {
                 <div class="sec head">Selected Recipe</div>
 
                     <div class="selected" v-if="selected.id!=undefined">
-                        <img :src="selected.src">
+
+                      <div class="containerImg">
+                        <img :src="selected.src" alt="Avatar" class="image">
+                        <div class="overlay">{{selected.addedTime}}</div>
+                      </div>
+
+
                         <div class="detail">
                             <div class="name">
                                 {{selected.name}} 
@@ -239,7 +245,7 @@ Vue.component("ADD", {
 Vue.component("searchcomp", {
   template :
   `
-  <input v-model="query" @input="queryF" class="form-control mr-sm-2 search" type="search" placeholder="Search recipe" aria-label="Search">
+  <input v-model="query" @input="queryF" class="form-control mr-sm-2" type="search" placeholder="Search recipe" aria-label="Search">
   `,
   data() {
     return {
