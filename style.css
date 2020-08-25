@@ -66,13 +66,23 @@ header:hover {
     margin-left: 1rem;
     margin-top: 1rem;
 }
+.boymurodov {
+    font-size: 1rem !important;  
+}
 .list ul li {
     display: flex;
     position: relative;
     background-color: gainsboro;
     border-radius: 3px;
-    
+    height: 6rem;
     transition: 0.5s;
+    overflow: hidden;
+}
+
+.activeRecipe{
+    background-color: rgb(245, 236, 236) !important;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
 }
 
 .list ul li:hover {
@@ -80,6 +90,9 @@ header:hover {
 }
 .active {
     background-color: rgb(245, 236, 236) !important;
+    border-radius: 5px;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
 }
 .martop {
     margin-top: 2rem;
@@ -87,11 +100,11 @@ header:hover {
 
 .list ul li img {
     width: 6rem;
-    height: 6rem;
+    height: 100%;
     object-fit: cover;
     float: left;
     border-radius: 5px;
-    cursor: pointer;
+    cursor: grab;
     transition: 0.3s;
     background-size: cover;
     
@@ -99,8 +112,9 @@ header:hover {
 .list ul li img:hover {opacity: 0.7;}
 
 .detail {
-    padding-top: 1.5rem;
+    margin: auto;
     padding-left: 1rem;
+    padding-right: 1rem;
     cursor: pointer;
     width: 100%;
     padding-bottom: 1rem;
@@ -133,20 +147,28 @@ header:hover {
     width: 100%;
     border-radius: 3px;
 }
+
 .selected .name {
     font-size: 2.5rem;
+    line-height: 2.3rem;
     text-align: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-right: 1rem;
 }
 .selected .r {
     text-decoration: underline;
+    line-height: 2.5rem;
 }
+
 .navbar {
     margin-top: 1rem;
     background-color: gainsboro !important;
     border-radius: 5px;
 }
+
 .headerFormText {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     line-height: 2.2rem; 
     margin-bottom: 0.6rem;
     
@@ -159,11 +181,6 @@ header:hover {
     width: 75%;
     margin: 0 auto;
 }
-.warning {
-    color: red;
-    margin-top: 1rem;
-    font-size: 1rem;
-}
 .success {
     text-align: center !important;
     font-size: 1rem;
@@ -172,9 +189,31 @@ footer {
     text-align: center;
     margin-top: 1rem;
     background-color: gainsboro;
-    font-size: 1rem;
+    font-size: 0.9rem;
     padding: 1rem 0;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-weight: 500;
     letter-spacing: -0.2px;
+    border-top-left-radius: 5px;
+    border-top-rightf-radius: 5px;
+}
+
+.dropleft {
+    height: 40%;
+}
+.dropleft button {
+    background-color: rgb(177, 177, 177) !important;
+    border: none;
+    
+}
+
+.timeAdd {
+    font-size: 1rem;
+}
+
+@media only screen and (max-width: 380px) {
+    .timeAdd {
+        font-size: 0.85rem;
+    }
+    
 }
