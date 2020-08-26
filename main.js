@@ -1,7 +1,6 @@
 Vue.component("LIST", {
-  
-  template: 
-  `<div class="container">
+
+    template: `<div class="container">
             <div class="row">
               <div class="col-md list">
                 <div class="sec head exception">A List of Recipes</div>
@@ -86,33 +85,33 @@ Vue.component("LIST", {
             </div>
             
           </div>`,
-  computed: {
-    recipeslist: function(){
-      return this.$root.recipeslist;
+    computed: {
+        recipeslist: function() {
+            return this.$root.recipeslist;
+        },
+        selected: function() {
+            return this.$root.selected;
+        },
+        computedList: function() {
+            return this.$root.computedList;
+        }
     },
-    selected: function(){
-      return this.$root.selected;
+    methods: {
+        showRecipe(recipe) {
+            this.$root.showRecipe(recipe);
+        },
+        removeElement(index) {
+            this.$root.removeElement(index);
+        },
+        edit(index) {
+            this.$root.currentcomp = "EDITELEMENT";
+            this.$root.editElementIndex = index
+        }
     },
-    computedList: function(){
-      return this.$root.computedList;
-    }
-  },
-  methods: {
-    showRecipe(recipe) {
-      this.$root.showRecipe(recipe);
-    },
-    removeElement(index) {
-      this.$root.removeElement(index);
-    },
-    edit(index) {
-        this.$root.currentcomp = "EDITELEMENT";
-        this.$root.editElementIndex = index
-    }
-  },
 })
 
 Vue.component("ADD", {
-  template: `
+    template: `
   <div class="container">
   <form>
     <div v-for="item in items" class="sec">
@@ -158,105 +157,102 @@ Vue.component("ADD", {
 
   
   `,
-  data() {
-    return {
-      items: [
-       {
-         image: false,
-       },
-    ],
-    typing: false,
-    name: "",
-    detailRecipe: "",
-    isActive: "False",
-    newRecipe: {
-      src:"",
-      name: "",
-      addedTime: "",
-      recipe: "",
-      id: 0,
-    }
-    }
-  },
-  methods: {
-    onFileChange(item, e) {
-      this.typing = false
-      var files = e.target.files || e.dataTransfer.files;
-      if (!files.length)
-        return;
-      this.createImage(item, files[0]);
-      
+    data() {
+        return {
+            items: [{
+                image: false,
+            }, ],
+            typing: false,
+            name: "",
+            detailRecipe: "",
+            isActive: "False",
+            newRecipe: {
+                src: "",
+                name: "",
+                addedTime: "",
+                recipe: "",
+                id: 0,
+            }
+        }
     },
-    createImage(item, file) {
-      var image = new Image();
-      var reader = new FileReader();
+    methods: {
+        onFileChange(item, e) {
+            this.typing = false
+            var files = e.target.files || e.dataTransfer.files;
+            if (!files.length)
+                return;
+            this.createImage(item, files[0]);
 
-      reader.onload = (e) => {
-        item.image = e.target.result;
-        this.newRecipe.src = item.image;
-      };
-      reader.readAsDataURL(file);
-    },
-    removeImage: function (item) {
-      item.image = false; 
-      this.newRecipe.src = "";
-    },
-    Validation: function(item) {
-      if ((this.name == "") && (this.detailRecipe =="")) {
-        this.isActive = false
-      } else if (this.name == "") {
-        this.isActive = "name"
-      } else if (this.detailRecipe == ""){
-        this.isActive = "detailRecipe"
-      } else {
-        this.typing = true,
-        this.isActive = true
-        this.newRecipe.name = this.name
-        this.newRecipe.recipe = this.detailRecipe
-        this.$root.nextid += 1
-        this.newRecipe.id = this.$root.nextid 
+        },
+        createImage(item, file) {
+            var image = new Image();
+            var reader = new FileReader();
 
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        var yyyy = today.getFullYear();
+            reader.onload = (e) => {
+                item.image = e.target.result;
+                this.newRecipe.src = item.image;
+            };
+            reader.readAsDataURL(file);
+        },
+        removeImage: function(item) {
+            item.image = false;
+            this.newRecipe.src = "";
+        },
+        Validation: function(item) {
+            if ((this.name == "") && (this.detailRecipe == "")) {
+                this.isActive = false
+            } else if (this.name == "") {
+                this.isActive = "name"
+            } else if (this.detailRecipe == "") {
+                this.isActive = "detailRecipe"
+            } else {
+                this.typing = true,
+                    this.isActive = true
+                this.newRecipe.name = this.name
+                this.newRecipe.recipe = this.detailRecipe
+                this.$root.nextid += 1
+                this.newRecipe.id = this.$root.nextid
 
-        today = 'Added on ' +  mm + '-' + dd + '-' + yyyy;
-        
-        
-        this.$root.nextid += 1
-        this.$root.recipeslist.unshift({
-          src: this.newRecipe.src,
-          name: this.newRecipe.name,
-          addedTime: today,
-          recipe: this.newRecipe.recipe,
-          id: this.$root.nextid,
-        })
-        this.name = ""
-        this.detailRecipe = ""
-        item.image = false
-        this.newRecipe.src = ""
-        
-      }
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+
+                today = 'Added on ' + mm + '-' + dd + '-' + yyyy;
+
+
+                this.$root.nextid += 1
+                this.$root.recipeslist.unshift({
+                    src: this.newRecipe.src,
+                    name: this.newRecipe.name,
+                    addedTime: today,
+                    recipe: this.newRecipe.recipe,
+                    id: this.$root.nextid,
+                })
+                this.name = ""
+                this.detailRecipe = ""
+                item.image = false
+                this.newRecipe.src = ""
+
+            }
+        }
     }
-  }
 })
 
 Vue.component("searchcomp", {
-  template :
-  `
+    template: `
   <input v-model="query" @input="queryF" class="form-control mr-sm-2" type="search" placeholder="Search recipe" aria-label="Search">
   `,
-  data() {
-    return {
-      query: "",
-    }
-  },
-  methods: {
-    queryF: function() {
-      this.$root.queryText = this.query
-    }
-  },
+    data() {
+        return {
+            query: "",
+        }
+    },
+    methods: {
+        queryF: function() {
+            this.$root.queryText = this.query
+        }
+    },
 })
 
 Vue.component("EDITELEMENT", {
@@ -287,7 +283,7 @@ Vue.component("EDITELEMENT", {
         </div>
     </div>
     `,
-    data: function () {
+    data: function() {
         return {
             typing: false,
             src: false,
@@ -296,11 +292,9 @@ Vue.component("EDITELEMENT", {
             changedRecipe: false,
             name: "",
             recipe: "",
-            items: [
-            {
+            items: [{
                 image: false,
-            },
-            ],
+            }, ],
         }
     },
     computed: {
@@ -308,16 +302,16 @@ Vue.component("EDITELEMENT", {
             return {
                 name: this.$root.recipeslist[this.$root.editElementIndex].name,
                 recipe: this.$root.recipeslist[this.$root.editElementIndex].recipe,
-                
+
             }
         },
     },
     methods: {
         onFileChange(item, e) {
-        var files = e.target.files || e.dataTransfer.files;
-        if (!files.length)
-            return;
-        this.createImage(item, files[0]);
+            var files = e.target.files || e.dataTransfer.files;
+            if (!files.length)
+                return;
+            this.createImage(item, files[0]);
         },
         type(e) {
             if (e.target.tagName == "INPUT") {
@@ -331,26 +325,26 @@ Vue.component("EDITELEMENT", {
         },
 
         createImage(item, file) {
-        var image = new Image();
-        var reader = new FileReader();
+            var image = new Image();
+            var reader = new FileReader();
 
-        reader.onload = (e) => {
-            item.image = e.target.result;
-            this.src = item.image;
-            this.typing = false;
-            this.changed = true;
-            
-        };
-        reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                item.image = e.target.result;
+                this.src = item.image;
+                this.typing = false;
+                this.changed = true;
+
+            };
+            reader.readAsDataURL(file);
         },
 
-        removeImage: function (item) {
+        removeImage: function(item) {
             this.src = "";
-            item.image = false; 
+            item.image = false;
             this.typing = false;
             this.changed = true;
-            
-            
+
+
         },
 
         Validation: function() {
@@ -378,64 +372,63 @@ Vue.component("EDITELEMENT", {
             this.items.image = false;
             console.log(this.items)
         }
-    } 
+    }
 })
 
 var app = new Vue({
-  el: "#app",
-  data: {
-    recipeslist: [
-    {
-      src:"food/cake.jpg",
-      name: "Cake",
-      addedTime: "Added on 8-18-2020",
-      recipe: "Directions. Preheat oven to 350 degrees F (175 degrees C). Grease and flour a 9x9 inch pan or line a muffin pan with paper liners. In a medium bowl, cream together the sugar and butter. Beat in the eggs, one at a time, then stir in the vanilla. Bake for 30 to 40 minutes in the preheated oven.",
-      id: 1,
+    el: "#app",
+    data: {
+        recipeslist: [{
+                src: "food/cake.jpg",
+                name: "Cake",
+                addedTime: "Added on 8-18-2020",
+                recipe: "Directions. Preheat oven to 350 degrees F (175 degrees C). Grease and flour a 9x9 inch pan or line a muffin pan with paper liners. In a medium bowl, cream together the sugar and butter. Beat in the eggs, one at a time, then stir in the vanilla. Bake for 30 to 40 minutes in the preheated oven.",
+                id: 1,
+            },
+            {
+                src: "food/Pie.jpg",
+                name: "Pie",
+                addedTime: "Added on 8-18-2020",
+                recipe: "Apple Crumble Make Apple Pie, adding 1 extra tablespoon flour to the filling. Off the heat, add 1/2 cup sour cream and 1/2 teaspoon nutmeg. Omit the top crust. Mix 1/2 cup flour, 1 cup oats, 3/4 cup each chopped walnuts and brown sugar, 6 tablespoons melted butter and a pinch of salt.",
+                id: 2,
+            },
+            {
+                src: "food/pizza.jpg",
+                name: "Pizza",
+                addedTime: "Added on 8-18-2020",
+                recipe: "Ingredients. 1 1/2 cups (355 ml) warm water (105°F-115°F) 1 package (2 1/4 teaspoons) of active dry yeast. 3 3/4 cups (490 g) bread flour. 2 tablespoons extra virgin olive oil (omit if cooking pizza in a wood-fired pizza oven) 2 teaspoons salt. 1 teaspoon sugar.",
+                id: 3,
+            },
+        ],
+        selected: {},
+        currentcomp: "LIST",
+        queryText: "",
+        editElementIndex: 0,
     },
-    {
-      src:"food/Pie.jpg",
-      name: "Pie",
-      addedTime: "Added on 8-18-2020",
-      recipe: "Apple Crumble Make Apple Pie, adding 1 extra tablespoon flour to the filling. Off the heat, add 1/2 cup sour cream and 1/2 teaspoon nutmeg. Omit the top crust. Mix 1/2 cup flour, 1 cup oats, 3/4 cup each chopped walnuts and brown sugar, 6 tablespoons melted butter and a pinch of salt.",
-      id: 2,
+
+    methods: {
+        showRecipe(recipe) {
+            this.selected = recipe;
+        },
+        removeElement(index) {
+            if (this.recipeslist[index].id == this.selected.id) {
+                this.selected = {}
+            }
+            this.recipeslist.splice(index, 1)
+
+        },
+
     },
-    {
-      src:"food/pizza.jpg",
-      name: "Pizza",
-      addedTime: "Added on 8-18-2020",
-      recipe: "Ingredients. 1 1/2 cups (355 ml) warm water (105°F-115°F) 1 package (2 1/4 teaspoons) of active dry yeast. 3 3/4 cups (490 g) bread flour. 2 tablespoons extra virgin olive oil (omit if cooking pizza in a wood-fired pizza oven) 2 teaspoons salt. 1 teaspoon sugar.",
-      id: 3,
+    computed: {
+        computedList: function() {
+            var vm = this
+            return this.recipeslist.filter(function(item) {
+                return ((item.name.toLowerCase().indexOf(vm.queryText.toLowerCase()) !== -1) || (item.recipe.toLowerCase().indexOf(vm.queryText.toLowerCase()) !== -1))
+            })
+        },
+        nextid: function() {
+            return this.recipeslist.length + 1
+        }
     },
-    ],
-    selected: {},
-    currentcomp: "LIST",
-    queryText:"",
-    editElementIndex: 0,
-  },
-  
-  methods: {
-    showRecipe(recipe) {
-      this.selected = recipe;
-    },
-    removeElement(index) {
-      if (this.recipeslist[index].id == this.selected.id) {
-        this.selected = {}
-      }
-      this.recipeslist.splice(index,1)
-      
-    },
-    
-  },
-  computed: {
-    computedList: function () {
-      var vm = this
-      return this.recipeslist.filter(function (item) {
-        return ((item.name.toLowerCase().indexOf(vm.queryText.toLowerCase()) !== -1) || (item.recipe.toLowerCase().indexOf(vm.queryText.toLowerCase()) !== -1))
-      })
-    },
-    nextid: function() {
-        return this.recipeslist.length + 1
-    }
-  },
-  
+
 })
