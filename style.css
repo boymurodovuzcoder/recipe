@@ -11,6 +11,13 @@ header {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    
+}
+.badge {
+    background-color: #fff83156;
+    color: black ;
+    font-weight: 600 !important;
+    font-size: 1.2rem;
 }
 header:hover {
     opacity: 0.8;
