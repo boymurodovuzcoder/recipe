@@ -182,7 +182,7 @@ header:hover {
 }
 .selected img {
     width: 100%;
-    border-radius: 3px;
+    
 }
 
 .selected .name {
@@ -248,6 +248,14 @@ footer {
     font-size: 1rem;
 }
 
+.textFormat {
+    font-family: 'Inder', sans-serif; 
+    line-height: 28px; 
+    margin-bottom: 15px; 
+    color: #666;
+    cursor: text !important;
+}
+
 @media only screen and (max-width: 380px) {
     .timeAdd {
         font-size: 0.75rem;
@@ -258,5 +266,10 @@ footer {
     .nav-item {
         margin-top: 1rem;
         height: 3rem;
+    }
+}
+@media only screen and (max-width: 366px) {
+    .modal-body {
+        font-size: 1.2rem;
     }
 }

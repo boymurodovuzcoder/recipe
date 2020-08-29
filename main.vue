@@ -101,9 +101,13 @@ Vue.component("LIST", {
 
                     <div class="selected" v-if="selected.id!=undefined">
 
-                      <div class="containerImg">
-                        <img :src="selected.src" alt="Avatar" class="image">
-                        <div class="overlay">{{selected.addedTime}}</div>
+                      <div v-if="selected.src!=''" class="containerImg">
+                        <img :src="selected.src"  class="image rounded">
+                        <div class="overlay rounded">{{selected.addedTime}}</div>
+                      </div>
+                      <div v-else class="containerImg">
+                        <img :src="selected.src"  class="image rounded" style="padding-top:4.3rem; margin-bottom:1rem;">
+                        <div class="overlay rounded">{{selected.addedTime}}</div>
                       </div>
 
 
@@ -114,7 +118,7 @@ Vue.component("LIST", {
                             <span class="r">
                                 Recipe:
                             </span> <br>
-                            <span v-html="selected.recipe">
+                            <span v-html="selected.recipe" class="textFormat">
                             </span>
                             
                         </div>
@@ -496,6 +500,7 @@ var app = new Vue({
     queryText:"",
     editElementIndex: 0,
     deletingName: "",
+    nextid: 3,
     
   },
   
@@ -520,9 +525,6 @@ var app = new Vue({
         return ((item.name.toLowerCase().indexOf(vm.queryText.toLowerCase()) !== -1) || (item.recipe.toLowerCase().indexOf(vm.queryText.toLowerCase()) !== -1))
       })
     },
-    nextid: function() {
-        return this.recipeslist.length + 1
-    }
   },
   
 })
