@@ -52,7 +52,7 @@ Vue.component("LIST", {
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="#" @click="edit(index)">Edit</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">Delete</a>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal" @click="toBeDeleted(index)">Delete</a>
                         </div>
                         </div>
                        
@@ -61,7 +61,7 @@ Vue.component("LIST", {
                             <div class="modal-dialog" role="document">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h5 class="modal-title" id="exampleModalLabel">{{recipe.name.length>18 ? recipe.name.substring(0,18) + ".." : recipe.name}}</h5>
+                                  <h5 class="modal-title" id="exampleModalLabel">{{recipe.name.length>18 ? recipe.name.substring(0,18) + ".." : nameforname}}</h5>
                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
@@ -71,7 +71,7 @@ Vue.component("LIST", {
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background-color: #fff83156; border: none; color: black;">No</button>
-                                  <button type="button" @click="removeElement(index)" data-toggle="modal" data-target="#exampleModal2" data-dismiss="modal" class="btn btn-primary" style="background-color: gainsboro ; border: none; color: black;">Yes</button>
+                                  <button type="button" @click="removeElement(index, recipe)" data-toggle="modal" data-target="#exampleModal2" data-dismiss="modal" class="btn btn-primary" style="background-color: gainsboro ; border: none; color: black;">Yes</button>
                                 </div>
                               </div>
                             </div>
@@ -132,6 +132,13 @@ Vue.component("LIST", {
             
           </div>`,
   computed: {
+    nameforname: function() {
+      if (this.$root.recipeslist[this.$root.toBeDeletedIndex] == undefined) {
+        console.log("nothing special")
+      } else {
+        return this.$root.recipeslist[this.$root.toBeDeletedIndex].name;
+      }
+    },
     recipeslist: function(){
       return this.$root.recipeslist;
     },
@@ -149,10 +156,14 @@ Vue.component("LIST", {
     showRecipe(recipe) {
       this.$root.showRecipe(recipe);
     },
-    removeElement(index) {
-      this.$root.removeElement(index);
+    toBeDeleted(index) {
+      this.$root.toBeDeletedIndex = index
+    },
+    removeElement(index, recipe) {
+      this.$root.removeElement(index, recipe);
     },
     edit(index) {
+        console.log(index)
         this.$root.currentcomp = "EDITELEMENT";
         this.$root.editElementIndex = index
     }
@@ -280,6 +291,11 @@ Vue.component("ADD", {
           recipe: this.newRecipe.recipe,
           id: this.$root.nextid,
         })
+
+        localStorage.removeItem('recipeslist')
+        localStorage.setItem('recipeslist', JSON.stringify(this.$root.recipeslist))
+        this.$root.recipeslist = JSON.parse(localStorage.getItem('recipeslist'))
+        
         this.name = ""
         this.detailRecipe = ""
         item.image = false
@@ -462,11 +478,15 @@ Vue.component("EDITELEMENT", {
                 this.$root.recipeslist[this.$root.editElementIndex].recipe = this.recipe;
             }
             this.$root.recipeslist[this.$root.editElementIndex].addedTime = today;
+
+            localStorage.removeItem('recipeslist')
+            localStorage.setItem('recipeslist', JSON.stringify(this.$root.recipeslist))
+            this.$root.recipeslist = JSON.parse(localStorage.getItem('recipeslist'))
+            
             this.changed = false;
             this.changedName = false;
             this.changedRecipe = false;
             this.items.image = false;
-            console.log(this.items)
         }
     } 
 })
@@ -474,7 +494,17 @@ Vue.component("EDITELEMENT", {
 var app = new Vue({
   el: "#app",
   data: {
-    recipeslist: [
+    recipeslist: "",
+    selected: {},
+    currentcomp: "LIST",
+    queryText:"",
+    editElementIndex: 0,
+    deletingName: "",
+    nextid: 3,
+    toBeDeletedIndex: 0
+  },
+  created() {
+    var defaultRecipeslist = [
     {
       src:"food/cake.jpg",
       name: "Cake",
@@ -496,27 +526,31 @@ var app = new Vue({
       recipe: "Ingredients. 1 1/2 cups (355 ml) warm water (105°F-115°F) 1 package (2 1/4 teaspoons) of active dry yeast. 3 3/4 cups (490 g) bread flour. 2 tablespoons extra virgin olive oil (omit if cooking pizza in a wood-fired pizza oven) 2 teaspoons salt. 1 teaspoon sugar.",
       id: 3,
     },
-    ],
-    selected: {},
-    currentcomp: "LIST",
-    queryText:"",
-    editElementIndex: 0,
-    deletingName: "",
-    nextid: 3,
-    
+    ]
+    if (!localStorage.getItem('beforeEntered')) {
+      localStorage.setItem('recipeslist', JSON.stringify(defaultRecipeslist))
+      this.recipeslist = defaultRecipeslist
+      localStorage.setItem('beforeEntered', 'true')
+      console.log('welcome!')
+    } else {
+      this.recipeslist = JSON.parse(localStorage.getItem('recipeslist'))
+      console.log('welcome again!')
+    }
   },
-  
   methods: {
     showRecipe(recipe) {
       this.selected = recipe;
     },
-    removeElement(index) {
-      if (this.recipeslist[index].id == this.selected.id) {
+    removeElement(index, recipe) {
+      if (this.recipeslist[this.toBeDeletedIndex].id == this.selected.id) {
         this.selected = {}
       }
-      this.deletingName = this.recipeslist[index].name;
-      this.recipeslist.splice(index,1)
-      
+      this.deletingName = this.recipeslist[this.toBeDeletedIndex].name;
+      this.recipeslist.splice(this.toBeDeletedIndex,1)
+
+      localStorage.removeItem('recipeslist')
+      localStorage.setItem('recipeslist', JSON.stringify(this.recipeslist))
+      this.recipeslist = JSON.parse(localStorage.getItem('recipeslist'))
     },
     
   },
